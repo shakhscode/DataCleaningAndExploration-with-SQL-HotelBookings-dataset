@@ -3,19 +3,21 @@
 ### Aim of the project.
 - In an end to end data analytics project **data cleaning and data exploration** are two important steps. Unless the data is cleaned we can't discover  actual insights from the data.
 
-- I mostly use Excel Power query for data cleaning. [(You can see one of my data analysis project where I mostly used Excel Power Query)](https://github.com/shakhscode/Inflation-and-GDP-Growth-Analysis-G20Countries#inflation-and-gdp-growth-analysis-g20-countries), but for huge amount of data or for high dimensional data Excel is not a good option as Excel can perform limited tasks.
+- I mostly use Excel Power query for data cleaning. [(You can see one of my my data analysis project where I used Excel Power Query for data cleaning.)](https://github.com/shakhscode/Inflation-and-GDP-Growth-Analysis-G20Countries#inflation-and-gdp-growth-analysis-g20-countries), but for huge amount of data or for high dimensional data Excel is not a good option as Excel can perform limited tasks.
 -Comparatively SQL engine is faster and with SQL we can implement advanced logic or we can automate the data cleaning process using Procedural SQL. 
 
 So I decided to do some data cleaning using SQL. Main goal of this project is to sharpen my SQL and data cleaning skills.
 
 ### Used dataset
-The dataset is collected from [Kaggle](https://www.kaggle.com/datasets/jessemostipak/hotel-booking-demand). Its a hotel booking dataset with total 32 fields and 119390 rows. It is an ideal dataset for data cleaning practices as it contains lot of null values,miising values and errorneous data.
+The dataset is collected from [Kaggle](https://www.kaggle.com/datasets/jessemostipak/hotel-booking-demand). Its a hotel booking dataset with total 32 fields and 119390 rows. It is an ideal dataset for data cleaning practices as it contains lot of null values,missing values and errorneous data.
 
 [The collected data set in csv format before cleaning](hotel_bookings.csv).
 
 ### Used tools
 SQL - for data cleaning.
+
 PostgreSQl - to create the database.
+
 Python: pandas, psycopg2 - to connect to the database and to create a dynamic table from the csv file.
 
 #### The proejct invloves following steps - 
