@@ -16,7 +16,7 @@ sudo apt update
 pip3 install psycopg2
 ```
 ***
-
+## Detailed Explanations
 ## Motivation 
 - In an end to end data analytics project **data cleaning and data exploration** are two important steps. Unless the data is cleaned we can't discover  actual insights from the data.
 
@@ -43,9 +43,10 @@ The dataset is collected from [Kaggle](https://www.kaggle.com/datasets/jessemost
 - The selected dataset contains total 32 columns, so its not a good idea to create a table manually to add 32 columns.
 - So I used [psycopg2](https://www.psycopg.org/docs/) API to interact with PostgreSQL database using python and to automate the process to create a dynamic table with dynamic column names and data types.
 
-#### The function that can create a dynamic table with dynamic column names
+#### Function to create a dynamic table with dynamic column names
 ```
-createTable(name='TableName', allcolumns=list_of_extracted_columns,alldatatypes=list_of_extracted_datatypes)
+createTable(name='TableName', 
+            allcolumns=list_of_extracted_columns,alldatatypes=list_of_extracted_datatypes)
 ```
 
 The function I created [(see this file)](CreateDatabaseAndImportData.ipynb) can create a dynamic table in a database with dynamic column names and data types extracted from csv file using pandas. In such a way we can automate the process to create a table in a database form a csv file.
