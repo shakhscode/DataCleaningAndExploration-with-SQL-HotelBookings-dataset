@@ -35,7 +35,7 @@ The dataset is collected from [Kaggle](https://www.kaggle.com/datasets/jessemost
 
 - Python - pandas, psycopg2 - to connect to the database and to create a dynamic table from the csv file.
 
-## Step 1: Creating a database and a dynamic table.
+## Step 1: [Creating a database and a dynamic table](CreateDatabaseAndImportData.ipynb)
 - The collected dataset is in __.csv format. We can insert data from csv file into a SQL database but for this **first we need to create a table with simillar column names**, 
 - Till now SQL databases can't create a table automatically from a csv file. 
 
@@ -61,12 +61,79 @@ When I can do something easily and quickly, why should I choose the lengthiest w
 
 So I imported values using the GUI option in pgadmin.
 
-## Step 3: Checking and changing data types
+## Step 3: [Checking and changing data types](ChangeDataTypes.sql)
 From the csv file, pandas extracted column data types as 'int64', 'float64' and 'objects'. But in SQL, data types are identified as 
 'integer', 'float' or 'double precision'. Although the [function I created](CreateDatabaseAndImportData.ipynb) can fix change 'int64' to 'integer', 'float64' to 'double precision' but all other data types (like string, date_time, boolean) were identified as 'Objects' by pandas and were changed to 'varchar' when the table was created.
 
 So now, its time to check the columns (there are total 5 columns with wrong data types) to correct the respective data types if required. 
 
-[See this file for SQL queries to change the data types.](ChangeDataTypes.sql)
+[Checking and changing data types](ChangeDataTypes.sql)
 
 ## Step 4: Data cleaning
+### 4.1 Checking for Null values
+Normally following SQL query helps to find the number of null values present in a column.
+```
+SELECT count(*) FROM Table
+WHERE column is NULL;
+```
+But for a high dimensional dataset it is not possible to check null values in each column one by one. 
+
+#### Way 1: Using PL/SQL Procedure
+I created a PL/SQL procedure that can check presence of NULL values in all column, doesn't matter how many columns a dataset has.
+
+PL/SQL Procedure to count null values in all columns
+
+```
+--Count column wise number of NULL values.
+create or replace procedure columnWiseNullCount(total_columns int)
+language plpgsql
+as $$
+declare 
+total_columns int = total_columns;
+columnName varchar(50);
+total_nulls int;
+
+begin 
+	 
+     for i in 1..total_columns
+	 loop
+	 --Select a column 
+	 SELECT Column_name into columnName
+            FROM information_schema.columns
+            where table_name = 'bookings'
+            limit 1
+			offset i-1;
+	--Count the null values in that column
+	
+	 select count(*) from bookings into total_nulls
+               where columnName is null;
+	 
+	if total_nulls > 0 then
+	raise notice ' %, NULLs: %',columnName, total_nulls;
+	end if;
+
+	 end loop;
+
+end;
+$$
+```
+#### Way 2: Using Python Auto EDA libraries
+If we need to create a PL/SQL procedure for each task it will take a long time. So using the logic-"If I can do something easily, why should I work hard ?
+
+So rather than working hard lets work smart. 
+Lets import the data set into Python IDE and using Pandas-profiling lets generate an automated EDA report.
+
+```
+#import the libraries
+import pandas as pd
+import pandas_profiling as pf
+
+# import the dataset
+df = pd.read_csv('hotel_bookings.csv')
+
+report = pf.ProfileReport(df,explorative=True, dark_mode=True)
+report.to_file('report.html')
+```
+We can host the report.html file in local server and based on the report we can do whatever need to do with this dataset.
+
+### 4.2 Cleaning the null values.

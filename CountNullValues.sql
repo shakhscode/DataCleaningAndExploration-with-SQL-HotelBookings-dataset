@@ -38,6 +38,5 @@ $$
 call columnWiseNullCount(32)
 
 
-
 select count(*) from bookings 
 where agent is null
