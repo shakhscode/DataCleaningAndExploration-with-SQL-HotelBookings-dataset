@@ -17,6 +17,28 @@ pip3 install psycopg2
 ```
 ***
 ## Detailed Explanations
+### Contents of the repository
+
+[Motivation](#motivation)
+
+[Used dataset](#used-dataset)
+
+[Step 1: Creating a database and a dynamic table](#step-1-creating-a-database-and-a-dynamic-table)
+
+[Step 2: Import the values into the created table](#step-2-import-the-values-into-the-created-table)
+
+[Step 3: Checking and changing data types](#step-3-checking-and-changing-data-types)
+
+[Step 4: Data cleaning](#step-4-data-cleaning)
+
+[4.1 Checking and cleaning Null values](#41-checking-and-cleaning-null-values)
+
+>> [4.1.1 Checking for Null values](#411-checking-for-null-values)
+
+>>[4.1.2 Cleaning the missing and null values](#412-cleaning-the-missing-and-null-values)
+
+[4.2 Checking and cleaning duplicate values](#42-checking-and-cleaning-duplicate-values)
+
 ## Motivation 
 - In an end to end data analytics project **data cleaning and data exploration** are two important steps. Unless the data is cleaned we can't discover  actual insights from the data.
 
@@ -29,11 +51,6 @@ So I decided to do some data cleaning using SQL to sharpen my SQL logic.
 The dataset is collected from [Kaggle](https://www.kaggle.com/datasets/jessemostipak/hotel-booking-demand). Its a hotel booking dataset with total 32 fields and 119390 rows. It is an ideal dataset for data cleaning practices as it contains lot of null values,missing values and errorneous data.
 
 [The collected data set in csv format before cleaning](hotel_bookings.csv).
-
-## Used tools
-- SQL - for data cleaning and exploration.
-
-- Python - pandas, psycopg2 - to connect to the database and to create a dynamic table from the csv file.
 
 ## Step 1: [Creating a database and a dynamic table](CreateDatabaseAndImportData.ipynb)
 - The collected dataset is in __.csv format. We can insert data from csv file into a SQL database but for this **first we need to create a table with simillar column names**, 
@@ -70,7 +87,10 @@ So now, its time to check the columns (there are total 5 columns with wrong data
 [Checking and changing data types](ChangeDataTypes.sql)
 
 ## Step 4: Data cleaning
-### 4.1 Checking for Null values
+
+### 4.1 Checking and cleaning Null values
+
+### 4.1.1 Checking for Null values
 Normally following SQL query helps to find the number of null values present in a column.
 ```
 SELECT count(*) FROM Table
@@ -136,4 +156,7 @@ report.to_file('report.html')
 ```
 We can host the report.html file in local server and based on the report we can do whatever need to do with this dataset.
 
-### 4.2 Cleaning the null values.
+### 4.1.2 Cleaning the missing and null values
+[Check the file how I cleaned the missing values and null values](cleaningMissingAndNullValues.sql)
+
+### 4.2 Checking and cleaning Duplicate values
