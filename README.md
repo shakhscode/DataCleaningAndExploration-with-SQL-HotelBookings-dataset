@@ -37,7 +37,9 @@ pip3 install psycopg2
 
 >>[4.1.2 Cleaning the missing and null values](#412-cleaning-the-missing-and-null-values)
 
-[4.2 Checking and cleaning duplicate values](#42-checking-and-cleaning-duplicate-values)
+[4.2 Checking duplicate values](#42-checking-duplicate-values)
+
+[Step 5: Exploring the dataset](#step-5-exploring-the-dataset)
 
 ## Motivation 
 - In an end to end data analytics project **data cleaning and data exploration** are two important steps. Unless the data is cleaned we can't discover  actual insights from the data.
@@ -156,7 +158,26 @@ report.to_file('report.html')
 ```
 We can host the report.html file in local server and based on the report we can do whatever need to do with this dataset.
 
+The generated EDA report shows that following columns contain missing values.
+
+![](NULLValues.jpg)
+
+So now it has become easier to find the which columns contain NULL values.
 ### 4.1.2 Cleaning the missing and null values
+- Since the columns 'agent' and 'company' contains high % of NULL values, so entire columns are deleted.
+- Since columns 'children' and 'country' contains few rows with NULL values so respective rows are removed.
+
 [Check the file how I cleaned the missing values and null values](cleaningMissingAndNullValues.sql)
 
-### 4.2 Checking and cleaning Duplicate values
+### 4.2 Checking duplicate values
+Using CTID in PostgreSQL we can check for exact duplicate values in the dataset.
+[Check this file](CheckingDuplicateValues.sql).
+
+### Step 5: Exploring the dataset
+[Now lets explore the dataset to answer the following questions-](DataExploration.sql)
+- What is the most busiest month, i.e in which month highest bookings were done ?
+- Whether in weeknight or in weekend nigths number of customers are higher ?
+- What is the mostly reserved room type?
+- What is the mostly used way for booking a hotel?
+- How many customers carry babies or children with them?
+- What kind of hotel is mostly preffered , city hotel or resort hotel ?

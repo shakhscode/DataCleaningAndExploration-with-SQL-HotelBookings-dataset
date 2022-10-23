@@ -1,6 +1,26 @@
 -- Data cleaning based on the generated EDA report.
 
---1) In the column 'children' there are some NA values and NULL values
+--1) Column agent has 13.1% missing values, so its better to remove the column
+--First check the % of missing values
+select count(*)
+from bookings
+where agent is null;
+
+--So its better to drop the column
+alter table bookings 
+drop column agent
+
+-- 2) Column company has 94% missing values , so its better to remove the column 
+--Check the count
+select count(*)
+from bookings
+where company is null;
+
+--Remove the column 
+alter table bookings
+drop column company
+
+--3) In the column 'children' there are some NA values and NULL values
 
 --First check how many unknown values 
 select distinct children, count(children)
@@ -22,25 +42,13 @@ group by (children)
 alter table bookings 
 alter column children type int using children::integer;
 
---2) Column agent has 13.1% missing values, so its better to remove the column
---First check the % of missing values
+
+--4) Column 'country' has few rows with NULL values, remove them
+--first check the no. of rows with NULL values
 select count(*)
 from bookings
-where agent is null;
-
---So its better to drop the column
-alter table bookings 
-drop column agent
-
--- 3) Column company has 94% missing values , so its better to remove the column 
---Check the count
-select count(*)
-from bookings
-where company is null;
-
---Remove the column 
-alter table bookings
-drop column company
-
-
+where country is null
+--remove the rows with null values
+delete from bookings 
+where country is NULL
 
