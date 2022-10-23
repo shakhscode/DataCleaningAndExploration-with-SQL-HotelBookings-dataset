@@ -1,6 +1,6 @@
 # Data Cleaning and Exploration with SQL-Hotel Bookings Dataset
 
-### Aim of the project.
+### Aim of the project
 - Cleaning and preparing a messy dataset for analysis.
 - Building SQL logic for data cleaning operations like cleaning missing values, duplicate values etc.
 - Exploratory data analysis using SQL.
