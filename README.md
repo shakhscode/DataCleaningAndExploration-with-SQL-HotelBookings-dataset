@@ -2,8 +2,8 @@
 
 ### Aim of the project.
 - Cleaning and preparing a messy dataset for analysis.
-- Building SQL logic for data cleaing operations like cleaning missing values, duplicate values etc.
-- Expploratory data analysis using SQL.
+- Building SQL logic for data cleaning operations like cleaning missing values, duplicate values etc.
+- Exploratory data analysis using SQL.
 ### Used tools
 - SQL (PostgreSQL)
 - Python-Pandas, Psycopg2 (VS Code)
@@ -44,13 +44,14 @@ pip3 install psycopg2
 ## Motivation 
 - In an end to end data analytics project **data cleaning and data exploration** are two important steps. Unless the data is cleaned we can't discover  actual insights from the data.
 
-- I mostly use Excel Power query for data cleaning. [(You can see one of my my data analysis project where I used Excel Power Query for data cleaning.)](https://github.com/shakhscode/Inflation-and-GDP-Growth-Analysis-G20Countries#inflation-and-gdp-growth-analysis-g20-countries), but for huge amount of data or for high dimensional data Excel.
--Comparatively SQL engine is faster than Excel and with SQL we can implement advanced logic for a task.
+- I mostly use Excel Power query for data cleaning. [(You can see one of my data analysis project where I used Excel Power Query for data cleaning.)](https://github.com/shakhscode/Inflation-and-GDP-Growth-Analysis-G20Countries#inflation-and-gdp-growth-analysis-g20-countries), but for huge amount of data or for high dimensional data Excel is not good enough to handle.
+
+- Comparatively SQL engine is faster than Excel and with SQL we can implement advanced logic for a task.
 
 So I decided to do some data cleaning using SQL to sharpen my SQL logic.
 
 ## Used dataset
-The dataset is collected from [Kaggle](https://www.kaggle.com/datasets/jessemostipak/hotel-booking-demand). Its a hotel booking dataset with total 32 fields and 119390 rows. It is an ideal dataset for data cleaning practices as it contains lot of null values,missing values and errorneous data.
+The dataset is collected from [Kaggle](https://www.kaggle.com/datasets/jessemostipak/hotel-booking-demand). Its a hotel booking dataset with total 32 fields and 119390 rows. It is an ideal dataset for data cleaning practices as it contains lots of null values,missing values and errorneous data.
 
 [The collected data set in csv format before cleaning](hotel_bookings.csv).
 
@@ -60,7 +61,7 @@ The dataset is collected from [Kaggle](https://www.kaggle.com/datasets/jessemost
 
 - For a dataset with few no. of columns (lets say 4 or 5) we can create a table manually, but for a high dimensional dataset the manual process will consume lot of time. 
 - The selected dataset contains total 32 columns, so its not a good idea to create a table manually to add 32 columns.
-- So I used [psycopg2](https://www.psycopg.org/docs/) API to interact with PostgreSQL database using python and to automate the process to create a dynamic table with dynamic column names and data types.
+- So I used [psycopg2](https://www.psycopg.org/docs/) API to interact with PostgreSQL database and to automate the process to create a dynamic table with dynamic column names and data types.
 
 #### Function to create a dynamic table with dynamic column names
 ```
@@ -82,7 +83,7 @@ So I imported values using the GUI option in pgadmin.
 
 ## Step 3: [Checking and changing data types](ChangeDataTypes.sql)
 From the csv file, pandas extracted column data types as 'int64', 'float64' and 'objects'. But in SQL, data types are identified as 
-'integer', 'float' or 'double precision'. Although the [function I created](CreateDatabaseAndImportData.ipynb) can fix change 'int64' to 'integer', 'float64' to 'double precision' but all other data types (like string, date_time, boolean) were identified as 'Objects' by pandas and were changed to 'varchar' when the table was created.
+'integer', 'float' or 'double precision'. Although the [function I created](CreateDatabaseAndImportData.ipynb) can fix to change 'int64' to 'integer', 'float64' to 'double precision' but all other data types (like string, date_time, boolean) were identified as 'Objects' by pandas and were changed to 'varchar' when the table was created.
 
 So now, its time to check the columns (there are total 5 columns with wrong data types) to correct the respective data types if required. 
 
@@ -93,15 +94,15 @@ So now, its time to check the columns (there are total 5 columns with wrong data
 ### 4.1 Checking and cleaning Null values
 
 ### 4.1.1 Checking for Null values
-Normally following SQL query helps to find the number of null values present in a column.
+Normally following SQL query helps to find the number of null values present in a column. 
 ```
 SELECT count(*) FROM Table
 WHERE column is NULL;
 ```
-But for a high dimensional dataset it is not possible to check null values in each column one by one. 
+But for a high dimensional dataset it is not possible to check null values in each column one by one. So what we can do to count null values in all the columns at the same time? 
 
 #### Way 1: Using PL/SQL Procedure
-I created a PL/SQL procedure that can check presence of NULL values in all column, doesn't matter how many columns a dataset has.
+I created a PL/SQL procedure that can check presence of NULL values in all columns, doesn't matter how many columns a dataset has.
 
 PL/SQL Procedure to count null values in all columns
 
@@ -140,7 +141,7 @@ end;
 $$
 ```
 #### Way 2: Using Python Auto EDA libraries
-If we need to create a PL/SQL procedure for each task it will take a long time. So using the logic-"If I can do something easily, why should I work hard ?
+If we need to create a PL/SQL procedure for each task, again it will take a long time. Let's use the logic-"If I can do something easily, why should I work hard ?
 
 So rather than working hard lets work smart. 
 Lets import the data set into Python IDE and using Pandas-profiling lets generate an automated EDA report.
@@ -156,28 +157,28 @@ df = pd.read_csv('hotel_bookings.csv')
 report = pf.ProfileReport(df,explorative=True, dark_mode=True)
 report.to_file('report.html')
 ```
-We can host the report.html file in local server and based on the report we can do whatever need to do with this dataset.
+We can host the 'report.html' file in local server by just clicking it and based on the report we can do whatever need to do with this dataset.
 
 The generated EDA report shows that following columns contain missing values.
 
 ![](NULLValues.jpg)
 
-So now it has become easier to find the which columns contain NULL values.
+So now it has become easier to find which columns contain NULL values.
 ### 4.1.2 Cleaning the missing and null values
-- Since the columns 'agent' and 'company' contains high % of NULL values, so entire columns are deleted.
-- Since columns 'children' and 'country' contains few rows with NULL values so respective rows are removed.
+- Since the columns 'agent' and 'company' contain high % of NULL values, so entire columns are deleted.
+- Since columns 'children' and 'country' contain few rows with NULL values so respective rows are removed rather than removing the entire column.
 
 [Check the file how I cleaned the missing values and null values](cleaningMissingAndNullValues.sql)
 
 ### 4.2 Checking duplicate values
-Using CTID in PostgreSQL we can check for exact duplicate values in the dataset.
+Using CTID in PostgreSQL we can check the number of rows that are exactly duplicate. And then we need to delete the duplicate rows if there are some.
 [Check this file](CheckingDuplicateValues.sql).
 
 ### Step 5: Exploring the dataset
 [Now lets explore the dataset to answer the following questions-](DataExploration.sql)
-- What is the most busiest month, i.e in which month highest bookings were done ?
-- Whether in weeknight or in weekend nigths number of customers are higher ?
-- What is the mostly reserved room type?
-- What is the mostly used way for booking a hotel?
-- How many customers carry babies or children with them?
+- What is the busiest month, i.e on which month highest bookings were done ?
+- Whether in weeknights or in weekend nigths number of customers were higher ?
 - What kind of hotel is mostly preffered , city hotel or resort hotel ?
+- What is the mostly reserved room type?
+- What is the mostly used way to book a hotel?
+- How many customers carry babies or children with them?

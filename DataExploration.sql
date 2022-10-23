@@ -13,6 +13,7 @@ select hotel, sum(stays_in_week_nights) as week_nights, sum(stays_in_weekend_nig
 from bookings 
 group by hotel
 order by 1 desc
+--Answer: Stays were higher in week nights
 
 -- Qn.3) What kind of hotel is mostly preffered , city hotel or resort hotel ?
 select hotel, count(*)
@@ -28,7 +29,7 @@ select reserved_room_type, count(*)
 	   order by count(*) desc;
 -- Answer: Room type 'A' were booked the most.
 
--- Qn. 5) What is the mostly used way for booking a hotel?
+-- Qn. 5) What is the mostly used way to book a hotel?
 select market_segment, count(*)
        from bookings 
 	   group by market_segment
